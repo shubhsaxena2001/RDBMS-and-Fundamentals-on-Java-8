@@ -1,0 +1,33 @@
+create table Employee(
+    EmpId number,
+    FirstName varchar2(20),
+    LastName varchar2(20),
+    EmailId varchar2(40),
+    Gender char(1),
+    MobileNo char(10),
+    DateOfJoining date default sysdate,
+    DeptId int);
+alter table employee add(Salary number(10,2));
+alter table Employee modify FirstName varchar2(30);
+alter table employee modify firstname varchar2(30) constraint Employee_FirstName_NN not null;
+alter table employee modify lastname varchar2(30) constraint Employee_LastName_NN not null;
+alter table employee add constraint Employee_Emailid_UN unique(Emailid);
+alter table employee add constraint Employee_Mobile_UN unique(mobileno);
+alter table employee add constraint employee_pk primary key(empid);
+alter table employee add constraint employee_gender_chk check(gender in ('M', 'F'));
+alter table employee add constraint employee_dept_ref foreign key(deptid) references department(deptid) on delete set null;
+
+insert into employee values(101, 'Shubh', 'Saxena', 'shubh@gmail.com', 'M', '987654321', sysdate, 1003, 25000);
+insert into employee values(102, 'Manish', 'Jha', 'jha@gmail.com', 'M', '9876543210', sysdate, 1001, 22000);
+insert into employee values(103, 'Monidepa', 'Ghosh', 'moni@gmail.com', 'F', '954321012', sysdate, 1003`, 32000);
+insert into employee values(104, 'Satwik', 'Poddar', 'stu@gmail.com', 'M', '544321012', sysdate, 1001, 37000);
+insert into employee values(105, 'Satyam', 'Gupta', 'sat@gmail.com', 'M', '884321012', sysdate, 1002, 47000);
+insert into employee values(106, 'Ankita', 'Gupta', 'ank@gmail.com', 'M', '114321012', sysdate, 1002, 43000);
+
+
+create table department(
+    deptid number constraint dept_pk primary key,
+    deptname varchar2(30) constraint dept_name_nn not null);
+insert into department values(1001, 'Accounts');
+insert into department values(1002, 'SysAdmin');
+insert into department values(1003, 'TNP');
