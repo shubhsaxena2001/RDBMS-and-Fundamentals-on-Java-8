@@ -31,3 +31,42 @@ create table department(
 insert into department values(1001, 'Accounts');
 insert into department values(1002, 'SysAdmin');
 insert into department values(1003, 'TNP');
+
+create user demouser identified by demo;
+
+grant create session, create table to demouser;
+
+grant select, insert, update on department to demouser;
+
+create table location(
+    lid number(5) constraint location_pk primary key,
+    city varchar2(20)
+    );
+
+create sequence location_lid_genpk
+    start with 100
+    increment by 1
+    nomaxvalue
+    nocycle
+    cache 1;
+
+insert into location values(location_lid_genpk.nextval, Bhopal');
+insert into location values(location_lid_genpk.nextval, 'Indore');
+insert into location values(location_lid_genpk.nextval, 'Gwalior');
+
+alter table department add lid number(5);
+alter table department add constraint department_loc_ref foreign key(lid) references location(lid) on delete set null;
+
+update department set lid = 100 where deptid = 1001;
+update department set lid = 101 where deptid = 1002;
+update department set lid = 102 where deptid = 1003;
+
+grant select, insert, update on employee to demouser;
+grant select, insert, update on location to demouser;
+
+select e.firstname, d.deptname, l.city from
+    SYSTEM.employee e natural join SYSTEM.department d natural join SYSTEM.location l;
+
+SELECT empid, firstname, salary FROM SYSTEM.employee
+ORDER by salary DESC
+OFFSET 1 ROWS FETCH NEXT 1 ROWS ONLY;
